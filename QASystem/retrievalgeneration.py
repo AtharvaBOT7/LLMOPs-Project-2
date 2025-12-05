@@ -5,6 +5,9 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain_community.vectorstores import FAISS
 
+import warnings
+warnings.filterwarnings('ignore')
+
 from QASystem.ingestion import get_vector_store, data_ingestion
 
 import os
@@ -29,11 +32,14 @@ PROMPT = PromptTemplate(
     input_variables=["context", "question"]
 )
 
-def get_claude_llm():
+def get_llm():
     bedrock_llm = Bedrock(
-        model_id="anthropic.claude-opus-4-5-20251101-v1:0",
-        region_name="us-east-2",
-        max_tokens = 512
+        model_id="amazon.titan-text-express-v1",
+        region_name="us-east-1",
+        model_kwargs={
+            "maxTokenCount": 512,  # NOT max_tokens
+            "temperature": 0.7
+        }
     )
     return bedrock_llm
 
@@ -57,6 +63,10 @@ if __name__ == "__main__":
 
     vectorstore_faiss = get_vector_store(docs)
 
-    llm = get_response_llm()
+    llm = get_llm()
 
     get_response_llm(llm, vectorstore_faiss, query)
+    
+    response = get_response_llm(llm, vectorstore_faiss, query)
+    print(f"\nQuestion: {query}")
+    print(f"\nAnswer: {response}")
