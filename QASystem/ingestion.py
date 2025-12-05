@@ -1,20 +1,18 @@
 from langchain_community.document_loaders import PyPDFDirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import BedrockEmbeddings
-from langchain.llms.bedrock import Bedrock
+from langchain_community.llms import Bedrock
 
 import os
 import json
 import boto3
 import sys
 
-# Bedrock Client Initialization
-
-bedrock = boto3.client(service_name='bedrock_runtime')
+# Bedrock Embeddings Initialization
 bedrock_embeddings = BedrockEmbeddings(
-    model_id="amazon.titan-embed-text-v1",
-    bedrock_client=bedrock
+    model_id="amazon.titan-embed-text-v2:0",
+    region_name="us-east-2"  # specify your region
 )
 
 def data_ingestion():
