@@ -6,3 +6,4 @@ tiktoken
 boto3==1.34.37
 chromadb
 google_generativeai
+awscli
